@@ -1,12 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * Copyright (c) 2022-2022 ThemePoint
+ *
+ * @author Hendrik Legge <hendrik.legge@themepoint.de>
+ *
+ * @version 1.0.0
+ */
+
 namespace Flexic\Recaster;
 
-class Recaster
+final class Recaster
 {
     public function __construct(
         readonly private object $input,
-    ) {}
+    ) {
+    }
 
     public function toClass(
         object|string $target,
@@ -38,7 +49,7 @@ class Recaster
     }
 
     private function convertValues(
-        object|array &$output
+        object|array &$output,
     ): void {
         if (\is_object($output)) {
             $targetReflection = new \ReflectionObject($output);
@@ -53,6 +64,7 @@ class Recaster
 
             if (\is_array($output)) {
                 $output[$property->getName()] = $property->getValue($this->input);
+
                 continue;
             }
 
@@ -66,14 +78,14 @@ class Recaster
 
             $targetProperty->setValue(
                 $output,
-                $property->getValue($this->input)
+                $property->getValue($this->input),
             );
         }
     }
 
     private function isPerformableActor(
         \ReflectionProperty $property,
-        object $input
+        object $input,
     ): bool {
         if (!$property->isInitialized($input) || !$property->isStatic()) {
             return false;
@@ -94,7 +106,7 @@ class Recaster
         $properties = (new \ReflectionObject($input))->getProperties();
 
         if (null !== ($parent = (new \ReflectionObject($input))->getParentClass())) {
-            $properties = array_merge($properties, $parent->getProperties());
+            $properties = \array_merge($properties, $parent->getProperties());
         }
 
         return $properties;
