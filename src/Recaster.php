@@ -30,7 +30,7 @@ final class Recaster
             $target = new $target();
         }
 
-        $this->convertValues(
+        $this->convertToClass(
             $target,
         );
 
@@ -41,20 +41,16 @@ final class Recaster
     {
         $output = [];
 
-        $this->convertValues(
+        $this->convertToArray(
             $output,
         );
 
         return $output;
     }
 
-    private function convertValues(
-        object|array &$output,
+    private function convertToArray(
+        array &$output,
     ): void {
-        if (\is_object($output)) {
-            $targetReflection = new \ReflectionObject($output);
-        }
-
         foreach ($this->getPropertyList($this->input) as $property) {
             if ($this->isPerformableActor($property, $this->input)) {
                 continue;
@@ -62,11 +58,21 @@ final class Recaster
 
             $this->updateAccessibility($property);
 
-            if (\is_array($output)) {
-                $output[$property->getName()] = $property->getValue($this->input);
+            $output[$property->getName()] = $property->getValue($this->input);
+        }
+    }
 
+    private function convertToClass(
+        object &$output,
+    ): void {
+        $targetReflection = new \ReflectionObject($output);
+
+        foreach ($this->getPropertyList($this->input) as $property) {
+            if ($this->isPerformableActor($property, $this->input)) {
                 continue;
             }
+
+            $this->updateAccessibility($property);
 
             if (!$targetReflection->hasProperty($property->getName())) {
                 continue;
@@ -103,10 +109,12 @@ final class Recaster
 
     private function getPropertyList(object $input): array
     {
-        $properties = (new \ReflectionObject($input))->getProperties();
+        $reflection = (new \ReflectionObject($input));
+        $properties = $reflection->getProperties();
 
-        if (null !== ($parent = (new \ReflectionObject($input))->getParentClass())) {
-            $properties = \array_merge($properties, $parent->getProperties());
+        $parentClass = $reflection->getParentClass();
+        if ($parentClass instanceof \ReflectionClass) {
+            $properties = \array_merge($properties, $parentClass->getProperties());
         }
 
         return $properties;
