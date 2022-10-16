@@ -1,7 +1,7 @@
 {
   "name": "flexic/recaster",
   "type": "library",
-  "description": "Allows to recast php objects.",
+  "description": "Package to recast php objects.",
   "keywords": [
     "recast",
     "object"
