@@ -52,7 +52,7 @@ final class Recaster
         array &$output,
     ): void {
         foreach ($this->getPropertyList($this->input) as $property) {
-            if ($this->isPerformableActor($property, $this->input)) {
+            if (!$this->isPerformableActor($property, $this->input)) {
                 continue;
             }
 
@@ -68,7 +68,7 @@ final class Recaster
         $targetReflection = new \ReflectionObject($output);
 
         foreach ($this->getPropertyList($this->input) as $property) {
-            if ($this->isPerformableActor($property, $this->input)) {
+            if (!$this->isPerformableActor($property, $this->input)) {
                 continue;
             }
 
@@ -93,7 +93,7 @@ final class Recaster
         \ReflectionProperty $property,
         object $input,
     ): bool {
-        if (!$property->isInitialized($input) || !$property->isStatic()) {
+        if (!$property->isInitialized($input) || $property->isStatic()) {
             return false;
         }
 
