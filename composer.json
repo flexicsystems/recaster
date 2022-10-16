@@ -1,0 +1,43 @@
+{
+  "name": "flexic/recaster",
+  "type": "library",
+  "description": "Allows to recast php objects.",
+  "keywords": [
+    "recast",
+    "object"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Hendrik Legge",
+      "email": "info@themepoint.de",
+      "homepage": "https://themepoint.de"
+    }
+  ],
+  "require": {
+    "php": "^8.1"
+  },
+  "config": {
+    "platform": {
+      "php": "8.1"
+    },
+    "preferred-install": "dist",
+    "sort-packages": true
+  },
+  "autoload": {
+    "psr-4": {
+      "Flexic\\Recaster\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Flexic\\Recaster\\Tests\\": "test/"
+    }
+  },
+  "require-dev": {
+    "ergebnis/php-cs-fixer-config": "^4.9.0",
+    "phpstan/phpstan": "^1.8.7",
+    "phpstan/phpstan-deprecation-rules": "^1.0.0",
+    "phpstan/phpstan-strict-rules": "^1.4.4"
+  }
+}
