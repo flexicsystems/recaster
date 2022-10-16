@@ -113,6 +113,7 @@ final class Recaster
         $properties = $reflection->getProperties();
 
         $parentClass = $reflection->getParentClass();
+
         if ($parentClass instanceof \ReflectionClass) {
             $properties = \array_merge($properties, $parentClass->getProperties());
         }
